@@ -11,7 +11,7 @@ app.use(cors());
 
 // Inicializa el SDK de MercadoPago con Access Token
 mercadopago.configure({
-  access_token: 'APP_USR-2151620563201494-080316-6fb52a0e6ee83830d0de0187744a6086-1928435193',
+  access_token: '**********************************',
 });
 
 
