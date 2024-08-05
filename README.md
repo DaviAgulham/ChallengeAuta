@@ -16,7 +16,7 @@ Remember change the acces_token of MercadoPago in the path server/server.js
 
 
 
-#################################################################################################################################################################################################
+#######################################################################################
 
 La aplicación debería permitir a los usuarios acceder a un catálogo de autos, que debe almacenarse en Firestore, donde el usuario tenga la posibilidad de:
 
