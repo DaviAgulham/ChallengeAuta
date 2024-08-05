@@ -98,6 +98,7 @@ const Favorites: React.FC = () => {
                 model={car.model}
                 year={car.year}
                 price={car.price}
+                photoUrl={car.photoUrl}
                 description={car.description}
                 isFavorite={true}
                 isReserved={car.isReserved || false}

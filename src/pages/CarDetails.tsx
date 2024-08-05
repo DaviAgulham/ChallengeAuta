@@ -25,6 +25,7 @@ const CarDetails: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isReserved, setIsReserved] = useState(false);
 
   useEffect(() => {
     const fetchCar = async () => {
@@ -32,7 +33,9 @@ const CarDetails: React.FC = () => {
         const carDoc = doc(db, 'cars', id || '');
         const carSnap = await getDoc(carDoc);
         if (carSnap.exists()) {
-          setCar(carSnap.data());
+          const carData = carSnap.data();
+          setCar(carData);
+          setIsReserved(carData.isReserved || false);
         } else {
           setError('No such car!');
         }
@@ -114,13 +117,20 @@ const CarDetails: React.FC = () => {
 
   return (
     <Container>
-      <Card>
+      <Card sx={{ marginTop: '1rem' }}>
         <CardMedia
           component="img"
           alt={`${car.make} ${car.model}`}
           height="300"
-          image={car.imageUrl || 'default-image-url.jpg'}
+          image={car.photoUrl || 'default-image-url.jpg'}
           title={`${car.make} ${car.model}`}
+          sx={{
+            height: 'auto',
+            maxHeight: 500,
+            width: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
+          }}
         />
         <CardContent>
           <Grid container spacing={2} alignItems="center">
@@ -136,6 +146,7 @@ const CarDetails: React.FC = () => {
           <Typography variant="h6">Year: {car.year}</Typography>
           <Typography variant="body1">Price: ${car.price}</Typography>
           <Typography variant="body2">{car.description}</Typography>
+          {isReserved && <Typography variant="body2" color="error">This car is reserved</Typography>}
         </CardContent>
       </Card>
     </Container>

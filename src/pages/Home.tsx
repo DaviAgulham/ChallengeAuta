@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getDocs, query, where, deleteDoc, doc, Query, QueryConstraint } from 'firebase/firestore';
+import { collection, getDocs, getDoc, query, where, deleteDoc, doc, Query, QueryConstraint } from 'firebase/firestore';
 import { db } from '../config/firebaseConfig';
 import { Car } from '../types';
 import CarCard from '../components/CarCard';
@@ -8,6 +8,7 @@ import { Container, Grid, CircularProgress, Typography, IconButton, Dialog, Dial
 import { useAuth } from '../context/AuthContext';
 import { Delete as DeleteIcon } from '@mui/icons-material';
 import { addFavorite, removeFavorite } from '../firestore/favorites';
+import { getStorage, ref, deleteObject } from 'firebase/storage';
 
 const Home: React.FC = () => {
   const { user, role } = useAuth();
@@ -71,8 +72,27 @@ const Home: React.FC = () => {
   const handleDelete = async () => {
     if (selectedCarId) {
       try {
-        await deleteDoc(doc(db, 'cars', selectedCarId));
-        setCars((prevCars) => prevCars.filter((car) => car.id !== selectedCarId));
+        // Primero, obtén la URL de la foto del auto para eliminarla del Storage
+        const carDocRef = doc(db, 'cars', selectedCarId);
+        const carSnap = await getDoc(carDocRef);
+        
+        if (carSnap.exists()) {
+          const carData = carSnap.data();
+          const photoUrl = carData.photoUrl;
+  
+          // Elimina la foto del Storage
+          if (photoUrl) {
+            const storage = getStorage();
+            const photoRef = ref(storage, photoUrl);
+            await deleteObject(photoRef);
+          }
+  
+          // Luego, elimina el documento del auto en Firestore
+          await deleteDoc(carDocRef);
+  
+          // Actualiza el estado para reflejar la eliminación
+          setCars((prevCars) => prevCars.filter((car) => car.id !== selectedCarId));
+        }
         handleClose();
       } catch (error) {
         console.error('Error deleting car:', error);
@@ -111,7 +131,7 @@ const Home: React.FC = () => {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>Car Catalog</Typography>
+      <Typography variant="h4" gutterBottom style={{ marginTop: 16 }}>Car Catalog</Typography>
       <Box mb={2}>
         <Button variant="contained" color="primary" onClick={toggleFilters}>
           {showFilters ? 'Hide Filters' : 'Show Filters'}
@@ -129,6 +149,7 @@ const Home: React.FC = () => {
               model={car.model}
               year={car.year}
               price={car.price}
+              photoUrl={car.photoUrl}
               description={car.description}
               isFavorite={car.isFavorite || false}
               isReserved={car.isReserved || false}

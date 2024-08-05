@@ -15,7 +15,7 @@ const ProtectedRouteComponent: React.FC<ProtectedRouteProps> = ({ children, requ
     return <div>Loading...</div>;
   }
 
-  if (!user) {
+  if (!loading && !user) {
     handleError('You need to be logged in to access this page.');
     return <Navigate to="/login" />;
   }

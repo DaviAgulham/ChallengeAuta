@@ -6,6 +6,7 @@ export interface Car {
   model: string;
   year: number;
   price: number;
+  photoUrl: string;
   description: string;
   isFavorite?: boolean;
   isReserved?: boolean;

@@ -4,6 +4,7 @@ import { db } from '../config/firebaseConfig';
 import { collection, addDoc } from 'firebase/firestore';
 import { useAuth } from '../context/AuthContext';
 import { Button, TextField, Typography, Container, Box, Snackbar, Alert } from '@mui/material';
+import UploadCarPhoto from '../components/UploadCarPhoto';
 
 interface FormData {
   make: string;
@@ -21,6 +22,7 @@ const AddCar: React.FC = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
+  const [photoUrl, setPhotoUrl] = useState('');
 
   if (role !== 'team') {
     return <Typography variant="h6" color="error">Access Denied</Typography>;
@@ -31,13 +33,15 @@ const AddCar: React.FC = () => {
       const newCar = {
         ...data,
         isFavorite: false,
-        isReserved: false
+        isReserved: false,
+        photoUrl
       };
 
       await addDoc(collection(db, 'cars'), newCar);
       setSnackbarMessage('Vehículo registrado con éxito');
       setSnackbarSeverity('success');
       reset();
+      setPhotoUrl(''); // Reset photoUrl after successful submission
     } catch (error) {
       console.error('Error adding document: ', error);
       setSnackbarMessage('Error al registrar el vehículo');
@@ -53,7 +57,7 @@ const AddCar: React.FC = () => {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>Add a New Car</Typography>
+      <Typography variant="h4" gutterBottom style={{ marginTop: 16 }}>Add a New Car</Typography>
       <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
         <TextField
           {...register('make', { required: 'Make is required' })}
@@ -108,6 +112,7 @@ const AddCar: React.FC = () => {
           error={!!errors.description}
           helperText={errors.description?.message}
         />
+        <UploadCarPhoto setPhotoUrl={setPhotoUrl} />
         <Button type="submit" variant="contained" color="primary" style={{ marginTop: 16 }}>
           Add Car
         </Button>

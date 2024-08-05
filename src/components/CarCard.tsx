@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, IconButton, CardActionArea, Button, Box } from '@mui/material';
+import { Card, CardContent, Typography, IconButton, CardActionArea, Button, Box, CardMedia } from '@mui/material';
 import { Favorite as FavoriteIcon, FavoriteBorder as FavoriteBorderIcon } from '@mui/icons-material';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,7 @@ interface CarCardProps {
   description: string;
   isFavorite: boolean;
   isReserved?: boolean;
+  photoUrl: string;  // Asegúrate de incluir el prop photoUrl
   children?: React.ReactNode;
   onToggleFavorite: (id: string, isFavorite: boolean) => Promise<void>;
 }
@@ -29,6 +30,7 @@ const CarCard: React.FC<CarCardProps> = ({
   description,
   isFavorite,
   isReserved = false,
+  photoUrl,
   children,
   onToggleFavorite
 }) => {
@@ -115,18 +117,26 @@ const CarCard: React.FC<CarCardProps> = ({
   return (
     <Card sx={{ display: 'flex', flexDirection: 'column', height: '100%', backgroundColor: reserved ? 'rgba(0, 0, 0, 0.5)' : 'inherit', pointerEvents: reserved ? 'none' : 'auto' }}>
       <CardActionArea onClick={handleClick} sx={{ flexGrow: 1 }}>
+        <CardMedia
+          component="img"
+          height="140"
+          image={photoUrl}
+          alt={`${make} ${model}`}
+        />
         <CardContent>
           <Typography variant="h5">{make} {model}</Typography>
           <Typography variant="subtitle1">{year}</Typography>
           <Typography variant="body2" color="textSecondary">{description}</Typography>
           <Typography variant="h6">${price}</Typography>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton onClick={(e) => {
-              e.stopPropagation();
-              handleFavoriteToggle();
-            }}>
-              {favorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
-            </IconButton>
+            {role === 'consumer' && (
+              <IconButton onClick={(e) => {
+                e.stopPropagation();
+                handleFavoriteToggle();
+              }}>
+                {favorite ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
+              </IconButton>
+            )}
             {children}
             {role === 'consumer' && (
               <Button variant="contained" color="secondary" onClick={handleContact}>
