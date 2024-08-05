@@ -72,7 +72,7 @@ const Home: React.FC = () => {
   const handleDelete = async () => {
     if (selectedCarId) {
       try {
-        // Primero, obtén la URL de la foto del auto para eliminarla del Storage
+        // Primero obtén la URL de la foto del auto para eliminarla del Storage
         const carDocRef = doc(db, 'cars', selectedCarId);
         const carSnap = await getDoc(carDocRef);
         
@@ -87,10 +87,10 @@ const Home: React.FC = () => {
             await deleteObject(photoRef);
           }
   
-          // Luego, elimina el documento del auto en Firestore
+          // elimina el documento del auto en Firestore
           await deleteDoc(carDocRef);
   
-          // Actualiza el estado para reflejar la eliminación
+          // Actualiza el estado
           setCars((prevCars) => prevCars.filter((car) => car.id !== selectedCarId));
         }
         handleClose();
