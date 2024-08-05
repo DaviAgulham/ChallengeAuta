@@ -18,6 +18,7 @@ export interface User {
   email?: string;
   role: UserRole;
   favorites?: string[];
+  dni?: string;
 }
 
 export interface Query {

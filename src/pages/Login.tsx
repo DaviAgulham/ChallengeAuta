@@ -6,7 +6,7 @@ import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import { useNavigate } from "react-router-dom";
 import { assignRole } from '../firestore/roles';
 import { useAuth } from "../context/AuthContext";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { db } from "../config/firebaseConfig";
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
@@ -14,7 +14,15 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(props,
 });
 
 const Login: React.FC = () => {
-  const { register, handleSubmit, control } = useForm();
+  const { register, handleSubmit, control, formState: { errors } } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+      name: '',
+      dni: '',
+      role: 'consumer'
+    }
+  });
   const auth = getAuth();
   const [isSignUp, setIsSignUp] = useState(false);
   const [errorOpen, setErrorOpen] = useState(false);
@@ -30,6 +38,14 @@ const Login: React.FC = () => {
     try {
       if (isSignUp) {
         const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password);
+
+        await setDoc(doc(db, "users", userCredential.user.uid), {
+          email: data.email,
+          name: data.name,
+          dni: data.dni,
+          role: data.role
+        });
+
         await assignRole(userCredential.user.uid, data.role);
         setUser(userCredential.user);
         setRole(data.role);
@@ -98,41 +114,73 @@ const Login: React.FC = () => {
         <Typography variant="h4">{isSignUp ? "Sign Up" : "Login"}</Typography>
         <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
           <TextField
-            {...register("email")}
+            {...register("email", { required: "Email is required" })}
             label="Email"
             fullWidth
             margin="normal"
             variant="outlined"
             required
+            error={!!errors.email}
+            helperText={errors.email?.message}
           />
           <TextField
-            {...register("password")}
+            {...register("password", { required: "Password is required" })}
             label="Password"
             type="password"
             fullWidth
             margin="normal"
             variant="outlined"
             required
+            error={!!errors.password}
+            helperText={errors.password?.message}
           />
           {isSignUp && (
-            <FormControl fullWidth margin="normal">
-              <InputLabel id="role-label">Role</InputLabel>
-              <Controller
-                name="role"
-                control={control}
-                defaultValue="consumer"
-                render={({ field }) => (
-                  <Select
-                    labelId="role-label"
-                    label="Role"
-                    {...field}
-                  >
-                    <MenuItem value="consumer">Consumer</MenuItem>
-                    <MenuItem value="team">Team</MenuItem>
-                  </Select>
-                )}
+            <>
+              <TextField
+                {...register("name", { required: "Name is required" })}
+                label="Name"
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                required
+                error={!!errors.name}
+                helperText={errors.name?.message}
               />
-            </FormControl>
+              <TextField
+                {...register("dni", { 
+                  required: "DNI is required", 
+                  pattern: {
+                    value: /^[0-9]{1,8}$/,
+                    message: "DNI must be up to 8 digits"
+                  }
+                })}
+                label="DNI"
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                inputProps={{ maxLength: 8 }}
+                error={!!errors.dni}
+                helperText={errors.dni?.message}
+              />
+              <FormControl fullWidth margin="normal">
+                <InputLabel id="role-label">Role</InputLabel>
+                <Controller
+                  name="role"
+                  control={control}
+                  defaultValue="consumer"
+                  render={({ field }) => (
+                    <Select
+                      labelId="role-label"
+                      label="Role"
+                      {...field}
+                    >
+                      <MenuItem value="consumer">Consumer</MenuItem>
+                      <MenuItem value="team">Team</MenuItem>
+                    </Select>
+                  )}
+                />
+              </FormControl>
+            </>
           )}
           <Button type="submit" variant="contained" color="primary" fullWidth>
             {isSignUp ? "Sign Up" : "Login"}

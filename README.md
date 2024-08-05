@@ -48,26 +48,28 @@ Requisitos
     6. Persistir datos: los usuarios deben almacenarse en una base de datos de Firebase, asegurando que no se pierdan datos entre sesiones. El usuario debe loguearse en el sitio dejando sus datos personales (mediante react-hook-form o mediante google).
     
     7. Diseño responsivo: la aplicación debe ser responsiva y funcionar bien tanto en dispositivos móviles como de escritorio.
-    
-   8. Manejo de errores: la aplicación debe manejar los errores con elegancia y proporcionar comentarios significativos al usuario (por ejemplo, errores de validación de formularios, estado vacío de la lista de tareas pendientes). Manejar errores en la parte delantera y trasera.
+
+    8. Manejo de errores: la aplicación debe manejar los errores con elegancia y proporcionar comentarios significativos al usuario (por ejemplo, errores de validación de formularios, estado vacío de la lista de tareas pendientes). Manejar errores en la parte delantera y trasera.
 
 
 Aclaraciones
 
    1.Los usuarios con rol "Team" tienen permitido crear usuarios en /add-car, donde pueden ingresar los datos y hacer upload de una imagen de la unidad (se utilizó el bucket/store de firebase para las imagenes).
    
-   2.Los usuarios con rol "Consumer" tienen permitido la funcion de marcar como favorita una unidad y tienen el acceso permitido a la pagina /favorites donde pueden ver el listado de sus unidades favoritas
+   2.Los usuarios con rol "Consumer" tienen permitido la funcion de marcar como favorita una unidad y tienen el acceso permitido a la pagina /favorites donde pueden ver el listado de sus unidades favoritas.
    
    3.Los usuarios con rol "Consumer" tienen permitido la funcion de consultar sobre una unidad con el equipo, y los usuarios con el rol "Team" tienen el acceso permitido a la pagina /team-queries donde pueden ver el listado de consultas con su estado actual     
    ('pending' | 'resolved') y fecha de consulta.
    
-   4.1.Los usuarios con rol "Team" tienen la opcion de reservar imediatamente una unidad
+   4.1.Los usuarios con rol "Team" tienen la opcion de reservar imediatamente una unidad.
    
-   4.2.Los usuarios con rol "Consumer" pueden reservar una unidad a través del pago exitoso de la seña de 5000 utilizando la pasarela de pago de Mercado Pago(se utilizó el Checkout Pro)
+   4.2.Los usuarios con rol "Consumer" pueden reservar una unidad a través del pago exitoso de la seña de 5000 utilizando la pasarela de pago de Mercado Pago(se utilizó el Checkout Pro).
    
-   5.Los usuarios pueden aplicar los filtros en la home del sistema
+   5.Los usuarios pueden aplicar los filtros en la home del sistema.
+
+   6.El usuario al momento de registrarse tiene que ingresar: email, password, dni y rol.
    
-   7.El sistema se encuentra totalmente resposivo para dispositivos moviles y escritorio
+   7.El sistema se encuentra totalmente resposivo para dispositivos moviles y escritorio.
    
    8.El sistema maneja los errores de manera amigable y sencilla para el usuario.
    
