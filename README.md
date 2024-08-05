@@ -1,46 +1,45 @@
-# Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 ## Available Scripts
 
 In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.\
+Runs the client side and server side
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The server side with the MercadoPago integration is in the [http://localhost:8080](http://localhost:8080)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Remember change the firebase credentials in the path src/config/firebaseConfig
+Remember change the acces_token of MercadoPago in the path server/server.js
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+#################################################################################################################################################################################################
+La aplicación debería permitir a los usuarios acceder a un catálogo de autos, que debe almacenarse en Firestore, donde el usuario tenga la posibilidad de:
+• Marcar como favorito una unidad
+• Consultar sobre la unidad
+• Agregar una unidad
+• Ver la ficha de la unidad
+• Reservar la unidad mediante alguna pasarela de pago
+• Cualquier otra interacción que te parezca necesaria también es aceptada
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Requisitos
+    1. Agregar un vehículo: los usuarios (equipo de operaciones) deberían poder agregar una nueva unidad.
+    2. Marcar como favorito: los usuarios (consumidores finales) deberían poder ver una lista de todas sus unidades favoritas.
+    3. Consultar sobre una unidad: los usuarios deberían poder consultar con el equipo de operaciones sobre una unidad
+    4. Eliminar / Inhabilitar unidades: el equipo de operaciones debería poder eliminar unidades vendidas o inhabilitar unidades reservadas.
+    5. Aplicar Filtros: el usuario debe tener la posibilidad de aplicar filtros en el catálogo de unidades (utilizando índices desde Firestore) referidos a los autos.
+    6. Persistir datos: los usuarios deben almacenarse en una base de datos de Firebase, asegurando que no se pierdan datos entre sesiones. El usuario debe loguearse en el sitio dejando sus datos personales (mediante react-hook-form o mediante google).
+    7. Diseño responsivo: la aplicación debe ser responsiva y funcionar bien tanto en dispositivos móviles como de escritorio.
+   8. Manejo de errores: la aplicación debe manejar los errores con elegancia y proporcionar comentarios significativos al usuario (por ejemplo, errores de validación de formularios, estado vacío de la lista de tareas pendientes). Manejar errores en la parte delantera y trasera.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Aclaraciones
+   1.Los usuarios con rol "Team" tienen permitido crear usuarios en /add-car, donde pueden ingresar los datos y hacer upload de una imagen de la unidad (se utilizó el bucket/store de firebase para las imagenes).
+   2.Los usuarios con rol "Consumer" tienen permitido la funcion de marcar como favorita una unidad y tienen el acceso permitido a la pagina /favorites donde pueden ver el listado de sus unidades favoritas
+   3.Los usuarios con rol "Consumer" tienen permitido la funcion de consultar sobre una unidad con el equipo, y los usuarios con el rol "Team" tienen el acceso permitido a la pagina /team-queries donde pueden ver el listado de consultas con su estado actual     
+   ('pending' | 'resolved') y fecha de consulta.
+   4.1.Los usuarios con rol "Team" tienen la opcion de reservar imediatamente una unidad
+   4.2.Los usuarios con rol "Consumer" pueden reservar una unidad a través del pago exitoso de la seña de 5000 utilizando la pasarela de pago de Mercado Pago(se utilizó el Checkout Pro)
+   5.Los usuarios pueden aplicar los filtros en la home del sistema
+   6.
+   7.El sistema se encuentra totalmente resposivo para dispositivos moviles y escritorio
+   8.El sistema maneja los errores de manera amigable y sencilla para el usuario.
