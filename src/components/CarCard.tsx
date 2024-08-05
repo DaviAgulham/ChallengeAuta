@@ -16,7 +16,7 @@ interface CarCardProps {
   description: string;
   isFavorite: boolean;
   isReserved?: boolean;
-  photoUrl: string;  // Asegúrate de incluir el prop photoUrl
+  photoUrl: string; 
   children?: React.ReactNode;
   onToggleFavorite: (id: string, isFavorite: boolean) => Promise<void>;
 }
